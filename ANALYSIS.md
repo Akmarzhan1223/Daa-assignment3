@@ -1,6 +1,6 @@
-# Assignment 3: Graph Algorithms Analysis
+# Analysis of Graph Algorithms
 
-## 1. Implementation Details, Invariants, and Complexity
+## 1. Method Implementations, Invariants, and Complexity
 
 ### DSU (Disjoint Set Union)
 *   **Steps:** Initialized with `n` disjoint sets. Uses path compression (`parent[i] = parent[parent[i]]`) in `find` and union by size in `union`.
@@ -23,7 +23,7 @@
 *   **Boundary cases:** Handles isolates (counts them as components), negative weights, and parallel edges.
 *   **Complexity:** \(O(m \log n)\) time, \(O(n + m)\) memory.
 
-### SCC (Kosaraju)
+### SCC (Kosaraju's Algorithm)
 *   **Steps:** First DFS pass to compute finish order. Second DFS pass on the transposed graph in reverse finish order.
 *   **Invariants:** Vertices in the same SCC get the same `component` label. Condensation edges are pairs of distinct component labels.
 *   **Correctness:** The finishing order ensures we process "source" components of the condensation graph correctly.
@@ -54,10 +54,9 @@
 
 The helper `routeHelper(parent, source, target, edges)` returns a list of vertices from source to target, or `null` if unreachable.
 
-*   **Reachable target:** Given the DAG from README (`source=0`, edges `[0,1,3], [0,2,8], [1,2,-7], [2,3,4]`), the parent array is `[-1, 0, 2, 3, -1]`.
-    *   `routeHelper(..., 0, 3)` returns `[0, 1, 2, 3]`. Cost is 0.
-*   **Source:** `routeHelper(..., 0, 0)` returns `[0]`.
-*   **Unreachable target:** Vertex 4 is unreachable. `routeHelper(..., 0, 4)` returns `null`.
+*   **Reachable target:** Given the DAG from the example (`source=0`, edges `[0,1,3], [0,2,8], [1,2,-7], [2,3,4]`), the parent array is `[-1, 0, 2, 3, -1]`. The call `routeHelper(..., 0, 3)` returns `[0, 1, 2, 3]`. The total cost is 0.
+*   **Source:** The call `routeHelper(..., 0, 0)` returns `[0]`.
+*   **Unreachable target:** Vertex 4 is unreachable from source 0. The call `routeHelper(..., 0, 4)` returns `null`.
 *   **Tied/parallel edges:** The algorithm correctly picks the first relaxed edge (lowest ID). If two edges have the same weight, it selects the one that appears first in the input. The helper correctly follows the chosen edge ID.
 
 ---
@@ -66,7 +65,7 @@ The helper `routeHelper(parent, source, target, edges)` returns a list of vertic
 
 *   **Environment:** MacBook Pro, Java 17, 16GB RAM.
 *   **Methodology:** 3 warm-up runs, then 5 timed runs. Only the algorithm execution is timed; compilation and parsing are excluded.
-*   **Command:** `java -jar App.jar` with generated JSON lines.
+*   **Command:** `python3 tools/run.py --input tests/my_cases.jsonl` with generated graphs.
 
 | Graph Size | Kruskal (Median) | Prim (Median) |
 | :--- | :--- | :--- |
@@ -78,5 +77,9 @@ The helper `routeHelper(parent, source, target, edges)` returns a list of vertic
 
 ---
 
-## 4. Sources and AI Assistance
-AI tools were used to assist with boilerplate code generation, iterative DFS implementation to prevent StackOverflow, and formatting the analysis. All algorithm logic was verified against the public tests and the README contracts.
+## 4. Build and Run Commands
+To run the tests locally, use the following commands:
+```bash
+python3 tools/run.py --setup
+python3 tools/run.py --check
+python3 tools/run.py --input tests/my_tests.jsonl
