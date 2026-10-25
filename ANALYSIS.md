@@ -82,4 +82,4 @@ To run the tests locally, use the following commands:
 ```bash
 python3 tools/run.py --setup
 python3 tools/run.py --check
-python3 tools/run.py --input tests/my_tests.jsonl
+python3 tools/run.py --input tests/my_cases.jsonl
